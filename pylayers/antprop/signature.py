@@ -916,13 +916,12 @@ class Signatures(dict):
 
 #### 1
 
-                if dp>0 :
-                    pdb.set_trace()
-                    lsegso = frontline(self.L,cy,vn)
-                    for s in lsegso:
-                        cyb = filter(lambda n : n <> cy,self.L.Gs.node[s]['ncycles'])
+                if dp>0:
+                    lsegs = frontline(self.L,cya,vn)
+                    for s in lsegs:
+                        cyb = filter(lambda n : n <> cya,self.L.Gs.node[s]['ncycles'])
                         if cyb<>[]:
-                            dfl[cy].append(str((s,cy,cyb[0])))
+                            dfl[cy].append(str((s,cya,cyb[0])))
 
 
 
@@ -971,8 +970,8 @@ class Signatures(dict):
 
             for j in io_:
                 self.ds[j]=[[]]
-                for i in self.ds.keys():
-#                for i in io:
+#                for i in self.ds.keys():
+                for i in io:
                     self.sp(self.L.Gi,i,j,cutoff=cutoff)
             pdb.set_trace()
         # remianed keys

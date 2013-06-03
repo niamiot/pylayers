@@ -50,8 +50,8 @@ filestr = 'WHERE1'
 S.L.loadini(filestr+'.ini')
 S.L.dumpr()
 
-Ctx= 78
-Crx=34
+Ctx= 63
+Crx=61
 #if not os.path.exists('r2d.pickle'):
 Si = Signatures(S.L,Ctx,Crx)
 Si.run3(cutoff=2)
