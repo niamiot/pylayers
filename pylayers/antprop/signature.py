@@ -217,17 +217,17 @@ class Signatures(dict):
                     # 3) each new path created in 2) is a new list of list sored into self.ds[target].
                     # 4) at the next iteration self.ds[target] will become the self.ds[source]
 
-                    sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
-                    map(lambda ss: self.ds[target].append(ss),iter(sources))
+#                    sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
+#                    map(lambda ss: self.ds[target].append(ss),iter(sources))
 
 
 # solution 1
-#                    for i in range(len(self.ds[source])):
-#                        s=self.ds[source][i] + visited[1:] + [target]
-#                        if self.ds[target] == [[]]:
-#                            self.ds[target]=[s]
-#                        else :
-#                            self.ds[target].append(s)
+                    for i in range(len(self.ds[source])):
+                        s=self.ds[source][i] + visited[1:] + [target]
+                        if self.ds[target] == [[]]:
+                            self.ds[target]=[s]
+                        else :
+                            self.ds[target].append(s)
 
                     # yield visited +[target]
                 elif child not in visited:
@@ -236,16 +236,16 @@ class Signatures(dict):
             else: #len(visited) == cutoff:
                 if child == target or target in children:
 # solution 2
-                    sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
-                    map(lambda ss: self.ds[target].append(ss),iter(sources))
+#                    sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
+#                    map(lambda ss: self.ds[target].append(ss),iter(sources))
 
 # solution 1
-#                    for i in range(len(self.ds[source])):
-#                        s=self.ds[source][i] + visited[1:] + [target]
-#                        if self.ds[target] == [[]]:
-#                            self.ds[target]=[s]
-#                        else :
-#                            self.ds[target].append(s)
+                    for i in range(len(self.ds[source])):
+                        s=self.ds[source][i] + visited[1:] + [target]
+                        if self.ds[target] == [[]]:
+                            self.ds[target]=[s]
+                        else :
+                            self.ds[target].append(s)
 
                 stack.pop()
                 visited.pop()
@@ -914,8 +914,9 @@ class Signatures(dict):
                 # if dot(vn,vpn) >0 cycle cya is ahead
 
 
-### 3
-#                if dp>0 :
+## 3            
+
+#                if dp>0 and cy ==lcil[0]:
 #                    sego=filter(lambda n : eval(n)[-1]==cya,iter(self.L.Gt.node[cy]['inter']))
 #                    dfl[cy].extend(sego)
 
@@ -931,11 +932,16 @@ class Signatures(dict):
 #### 1
 
                 if dp>0:
+
                     lsegs = frontline(self.L,cya,vn)
                     for s in lsegs:
                         cyb = filter(lambda n : n <> cya,self.L.Gs.node[s]['ncycles'])
                         if cyb<>[]:
                             dfl[cy].append(str((s,cya,cyb[0])))
+#                    if cy == lcil[0]:
+#                        pdb.set_trace()
+#                        X=filter(lambda n : eval(n)[-1]==cy,iter(self.L.Gt.node[cy]['inter']))
+#                        dfl[cy].extend(X)
 
             dfl[cy]=np.unique(dfl[cy]).tolist()
 
@@ -979,16 +985,28 @@ class Signatures(dict):
 
             for j in io_:
                 self.ds[j]=[[]]
-#                for i in self.ds.keys():
-                for i in io:
+                for i in self.ds.keys():
+#                for i in io:
                     self.sp(self.L.Gi,i,j,cutoff=lco[icy])
         # remianed keys
         rk=[]
+        print "dirty part: mapping too be compliant with rays ! "
         for k in self.ds.keys():
             if self.target != eval(k)[-1] :
                 self.ds.pop(k)
-        
-
+            else: 
+                # dirty mapping to be compliant with rays
+                # need to be implemented in sp 
+                for s in self.ds[k]:
+                    ls = len(s)
+                    try:
+                        self[ls]=np.vstack((self[ls], (np.array([self.L.di[x] for x in s]).T)))
+                    except:
+                        self[ls]=np.array([self.L.di[x] for x in s]).T
+        try:
+            self.pop(0)
+        except :
+            pass
             # [self.ds.pop(k) for k in io]
                     
                     # ds[j]

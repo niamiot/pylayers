@@ -52,10 +52,35 @@ S.L.dumpr()
 
 Ctx= 63
 Crx=61
+
+
+poly1 = S.L.Gt.node[Ctx]['polyg']
+cp1 = poly1.centroid.xy
+
+poly2 = S.L.Gt.node[Crx]['polyg']
+cp2 = poly2.centroid.xy
+
+# <markdowncell>
+
+# Here the centroïd of each cycle is chosen in order to become respectively the transmitter and the receiver of the link. 
+
+# <codecell>
+
+ptx = np.array([cp1[0][0],cp1[1][0],1.5])
+prx = np.array([cp2[0][0],cp2[1][0],1.5])
+
+
+
 #if not os.path.exists('r2d.pickle'):
 Si = Signatures(S.L,Ctx,Crx)
 Si.run3(cutoff=2)
-#r2d = Si.rays(tx,rx)
+
+
+
+
+
+
+r2d = Si.rays(ptx,prx)
 #file=open("r2d.pickle","w")
 #pickle.dump(r2d,file)
 #file.close()
