@@ -47,11 +47,11 @@ def showr(L,r2d,tx,rx,k,l,color='b'):
 S = Simul()
 filestr = 'TA-Office'
 #S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
-S.L.loadini(filestr+'.ini','matDB.ini','slabDB.ini')
+S.L.loadini(filestr+'.ini')
+S.L.dumpr()
 
-pdb.set_trace()
-
-
+Ctx= 7
+Crx=3
 #if not os.path.exists('r2d.pickle'):
 Si = Signatures(S.L,Ctx,Crx)
 Si.run3(cutoff=3,dcut=3)

@@ -211,8 +211,11 @@ class Signatures(dict):
             elif len(visited) < cutoff:
                 if child == target:
                     for i in range(len(self.ds[source])):
-                        s=self.ds[source][i] + visited
-                        self.ds[target].append(s)
+                        s=self.ds[source][i] + visited[1:] + [target]
+                        if self.ds[target] == [[]]:
+                            self.ds[target]=[s]
+                        else :
+                            self.ds[target].append(s)
 
                     # yield visited +[target]
                 elif child not in visited:
@@ -221,8 +224,11 @@ class Signatures(dict):
             else: #len(visited) == cutoff:
                 if child == target or target in children:
                     for i in range(len(self.ds[source])):
-                        s=self.ds[source][i] + visited
-                        self.ds[target].append(s)
+                        s=self.ds[source][i] + visited[1:] + [target]
+                        if self.ds[target] == [[]]:
+                            self.ds[target]=[s]
+                        else :
+                            self.ds[target].append(s)
 
                 stack.pop()
                 visited.pop()
@@ -868,10 +874,7 @@ class Signatures(dict):
             poly1 = self.L.Gt.node[cy]['polyg']
             cp1 = poly1.centroid.xy
             p1 = np.array([cp1[0][0],cp1[1][0]])
-
             for cya in nghb:
-                if cy == 13:
-                    pdb.set_trace()
                 poly2 = self.L.Gt.node[cya]['polyg']
                 cp2 = poly2.centroid.xy
                 p2 = np.array([cp2[0][0],cp2[1][0]])
@@ -880,12 +883,21 @@ class Signatures(dict):
                 vpn = vp/m2
                 dp = np.dot(vpn,vn)
                 # if dot(vn,vpn) >0 cycle cya is ahead
-                if dp>0:
+                if dp>0 :
                     lsegso = frontline(self.L,cy,vn)
                     for s in lsegso:
                         cyb = filter(lambda n : n <> cy,self.L.Gs.node[s]['ncycles'])
                         if cyb<>[]:
                             dfl[cy].append(str((s,cy,cyb[0])))
+#                if dp>0 and np.sign(vpn[0])==np.sign(vn[0]) and np.sign(vpn[1])==np.sign(vn[1]):
+#                    lsegso = frontline(self.L,cy,vn)
+#                    for s in lsegso:
+#                        pdb.set_trace()
+#                        cyb = filter(lambda n : n <> cya,self.L.Gs.node[s]['ncycles'])
+#                        if cya in cyb<>[]:
+#                            dfl[cy].append(str((s,cy,cyb[0])))
+
+
             dfl[cy]=np.unique(dfl[cy]).tolist()
         # # list of interactions belonging to source
         # lis = self.L.Gt.node[lcil[0]]['inter']
@@ -913,24 +925,30 @@ class Signatures(dict):
         for icy in range(len(lcil)-1):
             
 
-            pdb.set_trace()
+
             io = dfl[lcil[icy]]
             io_ = dfl[lcil[icy+1]]
             print io
             print io_
             if icy == 0:
                 [self.ds.update({k:[[k]]}) for k in io]        
-
             # remove keys which are not in front line     
             # kds = self.ds.keys()
             # for k in kds :
             #     if k not in io:
             #         self.ds.pop(k)
-
             for j in io_:
                 self.ds[j]=[[]]
-                for i in io:
+                for i in self.ds.keys():
                     self.sp(self.L.Gi,i,j,cutoff=2)
+
+        # remianed keys
+        rk=[]
+        for k in self.ds.keys():
+            if self.target != eval(k)[-1] :
+                self.ds.pop(k)
+        
+
             # [self.ds.pop(k) for k in io]
                     
                     # ds[j]
