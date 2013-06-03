@@ -211,7 +211,7 @@ class Signatures(dict):
             elif len(visited) < cutoff:
                 if child == target:
                     for i in range(len(self.ds[source])):
-                        s=self.ds[target][i] + visited
+                        s=self.ds[source][i] + visited
                         self.ds[target].append(s)
 
                     # yield visited +[target]
@@ -221,7 +221,7 @@ class Signatures(dict):
             else: #len(visited) == cutoff:
                 if child == target or target in children:
                     for i in range(len(self.ds[source])):
-                        s=self.ds[target][i] + visited
+                        s=self.ds[source][i] + visited
                         self.ds[target].append(s)
 
                 stack.pop()

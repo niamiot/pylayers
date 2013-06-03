@@ -153,30 +153,30 @@ a=time.time()
 #if not os.path.exists('r2d.pickle'):
 Si = Signatures(S.L,Ctx,Crx)
 Si.run3(cutoff=3,dcut=3)
-r2d = Si.rays(tx,rx)
-file=open("r2d.pickle","w")
-pickle.dump(r2d,file)
-file.close()
-#else:
-#    file = open("r2d.pickle","r")
-#    r2d = pickle.load(file)
-r3d = r2d.to3D()
-r3d.locbas(S.L)
-r3d.fillinter(S.L)
+#r2d = Si.rays(tx,rx)
+#file=open("r2d.pickle","w")
+#pickle.dump(r2d,file)
+#file.close()
+##else:
+##    file = open("r2d.pickle","r")
+##    r2d = pickle.load(file)
+#r3d = r2d.to3D()
+#r3d.locbas(S.L)
+#r3d.fillinter(S.L)
 
-config = ConfigParser.ConfigParser()
-_filesimul = 'default.ini'
-filesimul = pyu.getlong(_filesimul, "ini")
-config.read(filesimul)
-fGHz = np.linspace(eval(config.get("frequency", "fghzmin")), 
-                     eval(config.get("frequency", "fghzmax")), 
-                     eval(config.get("frequency", "nf")))
+#config = ConfigParser.ConfigParser()
+#_filesimul = 'default.ini'
+#filesimul = pyu.getlong(_filesimul, "ini")
+#config.read(filesimul)
+#fGHz = np.linspace(eval(config.get("frequency", "fghzmin")), 
+#                     eval(config.get("frequency", "fghzmax")), 
+#                     eval(config.get("frequency", "nf")))
 
-Cn=r3d.eval(fGHz)
-Cn.freq=Cn.fGHz
-sco=Cn.prop2tran(a='theta',b='theta')
-wav = wvf.Waveform()
-ciro = sco.applywavB(wav.sfg)
+#Cn=r3d.eval(fGHz)
+#Cn.freq=Cn.fGHz
+#sco=Cn.prop2tran(a='theta',b='theta')
+#wav = wvf.Waveform()
+#ciro = sco.applywavB(wav.sfg)
 
 #raynumber = 4
 
