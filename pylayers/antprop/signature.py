@@ -210,12 +210,19 @@ class Signatures(dict):
                 visited.pop()
             elif len(visited) < cutoff:
                 if child == target:
-                    for i in range(len(self.ds[source])):
-                        s=self.ds[source][i] + visited[1:] + [target]
-                        if self.ds[target] == [[]]:
-                            self.ds[target]=[s]
-                        else :
-                            self.ds[target].append(s)
+
+# solution 2
+                    sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
+                    map(lambda ss: self.ds[target].append(ss),iter(sources))
+
+
+# solution 1
+#                    for i in range(len(self.ds[source])):
+#                        s=self.ds[source][i] + visited[1:] + [target]
+#                        if self.ds[target] == [[]]:
+#                            self.ds[target]=[s]
+#                        else :
+#                            self.ds[target].append(s)
 
                     # yield visited +[target]
                 elif child not in visited:
@@ -223,12 +230,17 @@ class Signatures(dict):
                     stack.append(iter(G[child]))
             else: #len(visited) == cutoff:
                 if child == target or target in children:
-                    for i in range(len(self.ds[source])):
-                        s=self.ds[source][i] + visited[1:] + [target]
-                        if self.ds[target] == [[]]:
-                            self.ds[target]=[s]
-                        else :
-                            self.ds[target].append(s)
+# solution 2
+                    sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
+                    map(lambda ss: self.ds[target].append(ss),iter(sources))
+
+# solution 1
+#                    for i in range(len(self.ds[source])):
+#                        s=self.ds[source][i] + visited[1:] + [target]
+#                        if self.ds[target] == [[]]:
+#                            self.ds[target]=[s]
+#                        else :
+#                            self.ds[target].append(s)
 
                 stack.pop()
                 visited.pop()
@@ -814,7 +826,10 @@ class Signatures(dict):
                     d[k][2*r+1,i]=a[1,i,r]
         self.update(d)
 
-    def run3(self,cutoff=1,dcut=2):
+
+
+
+    def run3(self,cutoff=1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -883,22 +898,39 @@ class Signatures(dict):
                 vpn = vp/m2
                 dp = np.dot(vpn,vn)
                 # if dot(vn,vpn) >0 cycle cya is ahead
+
+
+### 3
+#                if dp>0 :
+#                    sego=filter(lambda n : eval(n)[-1]==cya,iter(self.L.Gt.node[cy]['inter']))
+#                    dfl[cy].extend(sego)
+
+#### 2
+#                if dp>0 and np.sign(vpn[0])==np.sign(vn[0]) and np.sign(vpn[1])==np.sign(vn[1]):
+#                    lsegso = frontline(self.L,cy,vn)
+#                    for s in lsegso:
+
+#                        cyb = filter(lambda n : n <> cy,self.L.Gs.node[s]['ncycles'])
+#                        if cya in cyb<>[]:
+#                            dfl[cy].append(str((s,cy,cyb[0])))
+
+#### 1
+
                 if dp>0 :
+                    pdb.set_trace()
                     lsegso = frontline(self.L,cy,vn)
                     for s in lsegso:
                         cyb = filter(lambda n : n <> cy,self.L.Gs.node[s]['ncycles'])
                         if cyb<>[]:
                             dfl[cy].append(str((s,cy,cyb[0])))
-#                if dp>0 and np.sign(vpn[0])==np.sign(vn[0]) and np.sign(vpn[1])==np.sign(vn[1]):
-#                    lsegso = frontline(self.L,cy,vn)
-#                    for s in lsegso:
-#                        pdb.set_trace()
-#                        cyb = filter(lambda n : n <> cya,self.L.Gs.node[s]['ncycles'])
-#                        if cya in cyb<>[]:
-#                            dfl[cy].append(str((s,cy,cyb[0])))
+
+
 
 
             dfl[cy]=np.unique(dfl[cy]).tolist()
+        pdb.set_trace()
+
+
         # # list of interactions belonging to source
         # lis = self.L.Gt.node[lcil[0]]['inter']
 
@@ -921,7 +953,6 @@ class Signatures(dict):
         
 
         self.ds={}
-
         for icy in range(len(lcil)-1):
             
 
@@ -937,11 +968,13 @@ class Signatures(dict):
             # for k in kds :
             #     if k not in io:
             #         self.ds.pop(k)
+
             for j in io_:
                 self.ds[j]=[[]]
                 for i in self.ds.keys():
-                    self.sp(self.L.Gi,i,j,cutoff=2)
-
+#                for i in io:
+                    self.sp(self.L.Gi,i,j,cutoff=cutoff)
+            pdb.set_trace()
         # remianed keys
         rk=[]
         for k in self.ds.keys():
