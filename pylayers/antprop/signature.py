@@ -212,6 +212,11 @@ class Signatures(dict):
                 if child == target:
 
 # solution 2
+                    # 1) self.ds[source] = a list which contains a list of all previous interactions from previous cycle
+                    # 2) here, we extend each element of this list with a new path (a list of interaction) of the current cycle
+                    # 3) each new path created in 2) is a new list of list sored into self.ds[target].
+                    # 4) at the next iteration self.ds[target] will become the self.ds[source]
+
                     sources=map(lambda s: (s+visited[1:] + [target]),iter(self.ds[source]))
                     map(lambda ss: self.ds[target].append(ss),iter(sources))
 
@@ -881,6 +886,15 @@ class Signatures(dict):
         # dfl : dictionnary of fronlines
         dfl = {}
 
+        if lcil > 4:
+            lco = [1]*len(lcil)
+            lco[0] = 2
+#            lco[1] = 2
+            lco[-2] = 2
+            lco[-1] = 2
+        else :
+            lco= [2]*len(lcil)
+
         for cy in lcil:
             dfl[cy] = []
 
@@ -923,12 +937,7 @@ class Signatures(dict):
                         if cyb<>[]:
                             dfl[cy].append(str((s,cya,cyb[0])))
 
-
-
-
             dfl[cy]=np.unique(dfl[cy]).tolist()
-        pdb.set_trace()
-
 
         # # list of interactions belonging to source
         # lis = self.L.Gt.node[lcil[0]]['inter']
@@ -950,7 +959,7 @@ class Signatures(dict):
         # litTi = filter(lambda l: eval(l)[2]==ct,litT)
         # lit = litR + litTi
         
-
+        pdb.set_trace()
         self.ds={}
         for icy in range(len(lcil)-1):
             
@@ -972,8 +981,7 @@ class Signatures(dict):
                 self.ds[j]=[[]]
 #                for i in self.ds.keys():
                 for i in io:
-                    self.sp(self.L.Gi,i,j,cutoff=cutoff)
-            pdb.set_trace()
+                    self.sp(self.L.Gi,i,j,cutoff=lco[icy])
         # remianed keys
         rk=[]
         for k in self.ds.keys():
